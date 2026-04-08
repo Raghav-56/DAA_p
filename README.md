@@ -20,14 +20,79 @@ This project implements a simple proof-of-concept for ranking Amazon products fr
 
 ### Architecture
 
+**System Overview:**
+
+```mermaid
+graph TB
+    User["User"]
+
+    subgraph "Interfaces"
+        CLI["CLI Entry<br/>main.py"]
+        API["FastAPI Server<br/>Src/app.py"]
+    end
+
+    subgraph "API Layer"
+        RankEP["POST /rank<br/>GET /health"]
+    end
+
+    subgraph "Benchmarking"
+        Bench["Benchmark Suite<br/>Src/benchmark.py"]
+        BRunner["Benchmark Runner<br/>Src/benchmarks/runner.py"]
+        BPlots["Plot Generator<br/>Src/benchmarks/plots.py"]
+        BReport["Report Generator<br/>Src/benchmarks/reports.py"]
+    end
+
+    subgraph "Core Logic"
+        RankFunc["rank_products()<br/>Src/Algorithms/ranking.py"]
+        MergeSort["Merge Sort<br/>Src/Algorithms/merge_sort.py<br/>O(n log n) stable"]
+        QuickSort["Quick Sort<br/>Src/Algorithms/quick_sort.py<br/>O(n log n) avg"]
+    end
+
+    subgraph "Data & Output"
+        Dataset["Amazon Dataset<br/>42K products<br/>CSV in-memory cache"]
+        Results["outputs/<br/>CSV + PNG + MD"]
+    end
+    
+    User -->|CLI command| CLI
+    User -->|HTTP request| API
+    
+    CLI -->|--api flag| API
+    CLI -->|--benchmark flag| Bench
+    
+    API --> RankEP
+    RankEP --> RankFunc
+    RankEP --> Dataset
+    
+    RankFunc --> MergeSort
+    RankFunc --> QuickSort
+    
+    Bench --> BRunner
+    BRunner --> RankFunc
+    BRunner --> Dataset
+    
+    BRunner --> BPlots
+    BRunner --> BReport
+    
+    BPlots --> Results
+    BReport --> Results
+    
+    style MergeSort fill:#e1f5e1
+    style QuickSort fill:#e1f5e1
+    style Dataset fill:#fff4e1
+    style Results fill:#f0e1ff
 ```
-main.py                 # CLI entry point (benchmark and API commands)
-Src/
-├── __init__.py        # Package marker
-├── algorithms.py      # Merge Sort, Quick Sort, rank_products()
-├── app.py             # FastAPI server with /rank and /health
-└── benchmark.py       # Benchmarking suite
-```
+
+**Component Details:**
+
+| Component | Role | Input | Output |
+|-----------|------|-------|--------|
+| **Ranking API** | FastAPI server with REST endpoints | JSON request body | JSON response with ranked IDs and timing |
+| **Ranking Function** | Orchestrates sorting and filtering | Products list, strategy, algorithm, k | Top-k product IDs, elapsed time |
+| **Merge Sort** | Stable O(n log n) sorting | Array of tuples, key function | Sorted array |
+| **Quick Sort** | In-place O(n log n) avg sorting | Array of tuples, pivot strategy | Sorted array |
+| **Benchmark Runner** | Executes all test configurations | Dataset, sizes, k values, strategies | Raw timing results (CSV) |
+| **Plot Generator** | Creates performance visualizations | Benchmark results | PNG charts |
+| **Report Generator** | Generates markdown summary | Benchmark results | Markdown report |
 
 ### Component A: Ranking API
 
@@ -92,7 +157,7 @@ Benchmarks test algorithm performance across:
 - `outputs/reports/runtime_scaling.png`: Time vs dataset size
 - `outputs/reports/algorithm_comparison.png`: Algorithm comparison chart
 
-## Scope: What Is Included
+## Scope
 
 - FastAPI server with `/rank` and `/health` endpoints  
 - Merge Sort and Quick Sort algorithms with stable/avg $O(n \log n)$ complexity
@@ -100,14 +165,6 @@ Benchmarks test algorithm performance across:
 - Benchmark suite: 4 dataset sizes × 2 k values × 2 strategies × 2 algorithms = 32 configurations
 - Performance metrics: CSV results, timing statistics, runtime plots
 - Dataset caching for query efficiency
-
-## Scope: What Is Out of Scope
-
-- Pareto/multi-objective ranking
-- Personalized user-based ranking  
-- Result explanation/explainability
-- Advanced database indexing or ETL
-- Authentication/authorization
 
 ## Dataset
 
@@ -119,7 +176,7 @@ Benchmarks test algorithm performance across:
 - **Size:** 42,675 rows × 17 columns
 - **Primary ranking attributes:**
   - `discounted_price`: Current product price
-  - `product_rating`: Average customer rating (0.0–5.0)
+  - `product_rating`: Average customer rating (0.0 to 5.0)
 - **Additional attributes:** `product_title`, `total_reviews`, `product_category`, `discount_percentage`, `original_price`, etc.
 
 **Data preparation:**

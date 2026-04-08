@@ -27,7 +27,7 @@ def api(
         f"--host={host}",
         f"--port={port}",
         "--reload"
-    ])
+    ], check=True)
 
 
 if __name__ == "__main__":
