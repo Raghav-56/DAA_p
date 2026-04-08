@@ -26,7 +26,7 @@ def quick_sort(
     pivot_strategy: PivotStrategy = "middle"
 ) -> list[tuple]:
     """
-    Quick Sort with configurable pivot strategy.
+    Quick Sort with configurable pivot strategy (iterative implementation).
     
     Args:
         arr: List of tuples to sort
@@ -54,12 +54,20 @@ def quick_sort(
         arr[i + 1], arr[high] = arr[high], arr[i + 1]
         return i + 1
 
-    def quick_sort_recursive(arr, low, high):
-        if low < high:
-            pi = partition(arr, low, high)
-            quick_sort_recursive(arr, low, pi - 1)
-            quick_sort_recursive(arr, pi + 1, high)
-        return arr
-
     arr_copy = arr.copy()
-    return quick_sort_recursive(arr_copy, 0, len(arr_copy) - 1)
+    
+    # Iterative quicksort using explicit stack to avoid recursion depth issues
+    stack = [(0, len(arr_copy) - 1)]
+    
+    while stack:
+        low, high = stack.pop()
+        
+        if low < high:
+            pi = partition(arr_copy, low, high)
+            
+            # Push left partition to stack
+            stack.append((low, pi - 1))
+            # Push right partition to stack
+            stack.append((pi + 1, high))
+    
+    return arr_copy
