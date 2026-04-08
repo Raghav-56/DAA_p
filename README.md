@@ -162,7 +162,7 @@ Benchmarks test algorithm performance across:
 - FastAPI server with `/rank` and `/health` endpoints  
 - Merge Sort and Quick Sort algorithms with stable/avg $O(n \log n)$ complexity
 - Single-attribute ranking by price or rating (ascending/descending)
-- Benchmark suite: 4 dataset sizes × 2 k values × 2 strategies × 2 algorithms = 32 configurations
+- Benchmark suite: 6 dataset sizes × 2 k values × 2 strategies × 2 algorithms = 48 configurations
 - Performance metrics: CSV results, timing statistics, runtime plots
 - Dataset caching for query efficiency
 

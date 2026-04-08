@@ -160,7 +160,7 @@ This ensures identical results across multiple runs.
 - **k values**: 10, 100
 - **Strategies**: single_attribute_asc, single_attribute_desc
 - **Algorithms**: merge_sort, quick_sort
-- **Total runs**: 4 sizes × 2 k-values × 2 strategies × 2 algorithms = 32 core runs
+- **Total runs**: 6 sizes × 2 k-values × 2 strategies × 2 algorithms = 48 core runs
 
 ### 9.2 Benchmark Protocol
 

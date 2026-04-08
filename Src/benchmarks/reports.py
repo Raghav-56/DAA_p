@@ -30,6 +30,25 @@ def generate_benchmark_report(results, report_dir):
         f.write(f"**Test Configuration**: {len(dataset_sizes)} dataset sizes, ")
         f.write(f"{len(k_values)} k values, {len(strategies)} strategies, ")
         f.write(f"{len(algorithms)} algorithms\n\n")
+
+        # Include Visualizations securely
+        f.write("## Visualizations\n\n")
+        
+        f.write("### 1. Runtime Scaling (Time Complexity Data)\n")
+        f.write("![Runtime Scaling by Dataset Size](runtime_scaling.png)\n")
+        f.write("> **Description:** This plot visualizes the theoretical time complexity of each algorithm. It plots the execution time (in milliseconds) as the dataset size ($N$) grows, holding other variables constant. Expected performance is $O(N \\log N)$ across varying dataset sizes.\n\n")
+
+        f.write("### 2. Algorithm Comparison by $K$ Value\n")
+        f.write("![Algorithm Comparison](algorithm_comparison.png)\n")
+        f.write("> **Description:** Compares how algorithms handle varying small sizes of $K$ (e.g., top 10 vs top 100 vs top 1000). The error bars represent the standard deviation of execution time, indicating consistency. Note whether an algorithm becomes unpredictably slower as $k$ increases.\n\n")
+
+        f.write("### 3. Space Complexity (Memory Usage)\n")
+        f.write("![Space Complexity Memory](memory_scaling.png)\n")
+        f.write("> **Description:** This plot measures execution footprint (auxiliary space complexity). Algorithms like Merge Sort instantiate temporary structures for subarrays ($O(N)$), driving a linear increase in peak memory, whereas in-place variants like Quick Sort usually observe a smaller $O(\\log N)$ recursion stack overhead.\n\n")
+
+        f.write("### 4. Extreme $K$ Scaling\n")
+        f.write("![Extreme K Scaling](extreme_k_scaling.png)\n")
+        f.write("> **Description:** Explores performance when traversing into edge cases: asking for the top 10,000, 20,000, or up to $N$ items from the maximum dataset size. If the time stays strictly logarithmic, $k$ has low impact. If it worsens significantly as $k$ approaches $N$, the algorithm relies heavily on discarding segments early.\n\n")
         
         # Summary metrics
         f.write("## Summary Statistics\n\n")
