@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Rank Cards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="bg-shape bg-a"></div>
+    <div class="bg-shape bg-b"></div>
+
+    <main class="shell">
+      <header class="hero">
+        <p class="kicker">DAA Ranking Demo</p>
+        <h1>Sort products and show ranked cards</h1>
+        <p class="sub">Use your FastAPI endpoint to fetch top-k products and render them as clean cards.</p>
+      </header>
+
+      <section class="panel">
+        <form id="query-form" class="controls">
+          <label>
+            Strategy
+            <select id="strategy" name="strategy">
+              <option value="price_desc" selected>Price Descending</option>
+              <option value="price_asc">Price Ascending</option>
+              <option value="rating_desc">Rating Descending</option>
+              <option value="rating_asc">Rating Ascending</option>
+            </select>
+          </label>
+
+          <label>
+            Algorithm
+            <select id="algorithm" name="algorithm">
+              <option value="merge_sort" selected>Merge Sort</option>
+              <option value="quick_sort">Quick Sort</option>
+            </select>
+          </label>
+
+          <label>
+            Top K
+            <input id="k" name="k" type="number" min="1" max="50" value="10" />
+          </label>
+
+          <button type="submit">Rank Products</button>
+        </form>
+
+        <div id="status" class="status">Ready.</div>
+      </section>
+
+      <section id="results" class="grid" aria-live="polite"></section>
+    </main>
+
+    <template id="card-template">
+      <article class="card">
+        <div class="thumb-wrap">
+          <img class="thumb" alt="Product image" loading="lazy" />
+          <span class="rank-chip"></span>
+        </div>
+        <div class="card-body">
+          <h2 class="title"></h2>
+          <p class="price-row">
+            <span class="price"></span>
+            <span class="original"></span>
+          </p>
+          <p class="meta"></p>
+          <div class="badges"></div>
+          <a class="link" target="_blank" rel="noopener noreferrer">Open product</a>
+        </div>
+      </article>
+    </template>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

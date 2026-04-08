@@ -2,6 +2,8 @@ from typing import Any
 from pathlib import Path
 import pandas as pd
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from .algorithms import rank_product_rows, rank_products
@@ -11,7 +13,10 @@ app = FastAPI(title="Product Ranking API")
 
 # Load dataset
 DATASET_PATH = Path(__file__).parent.parent / "Dataset" / "amazon_products_sales_data" / "amazon_products_sales_data_cleaned.csv"
+STATIC_DIR = Path(__file__).parent / "static"
 _cache = {}
+
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 def load_data():
@@ -51,6 +56,12 @@ class RankRowsResponse(BaseModel):
     ranked_products: list[dict[str, Any]]
     elapsed_time_ms: float
     count: int
+
+
+@app.get("/")
+def home():
+    """Serve a minimal frontend for ranking and card display."""
+    return FileResponse(STATIC_DIR / "index.html")
 
 
 @app.get("/health")

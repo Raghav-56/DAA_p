@@ -240,6 +240,8 @@ uv run python main.py api --host 0.0.0.0 --port 5000
 
 Server runs at `http://localhost:5000`
 
+Open `http://localhost:5000` in your browser for a simple ranking UI with product cards.
+
 **Health check:**
 
 ```bash
