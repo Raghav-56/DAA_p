@@ -1,10 +1,10 @@
-import json
+from typing import Any
 from pathlib import Path
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from .algorithms import rank_products
+from .algorithms import rank_product_rows, rank_products
 
 
 app = FastAPI(title="Product Ranking API")
@@ -46,6 +46,13 @@ class RankResponse(BaseModel):
     count: int
 
 
+class RankRowsResponse(BaseModel):
+    """Response from /rank/rows endpoint with full product rows."""
+    ranked_products: list[dict[str, Any]]
+    elapsed_time_ms: float
+    count: int
+
+
 @app.get("/health")
 def health():
     """Health check endpoint."""
@@ -62,6 +69,23 @@ def rank(request: RankRequest):
             ranked_ids=ranked_ids,
             elapsed_time_ms=elapsed * 1000,
             count=len(ranked_ids),
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}")
+
+
+@app.post("/rank/rows", response_model=RankRowsResponse)
+def rank_rows(request: RankRequest):
+    """Rank products and return full row data for top-k results."""
+    try:
+        data = load_data()
+        ranked_rows, elapsed = rank_product_rows(data, request.strategy, request.algorithm, request.k)
+        return RankRowsResponse(
+            ranked_products=ranked_rows,
+            elapsed_time_ms=elapsed * 1000,
+            count=len(ranked_rows),
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

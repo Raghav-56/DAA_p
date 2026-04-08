@@ -35,3 +35,18 @@ response = urllib.request.urlopen(req)
 print("\nTop 10 by rating (descending):")
 print(json.dumps(json.loads(response.read().decode()), indent=2))
 
+# Test /rank/rows
+payload = {
+    "strategy": "price_desc",
+    "algorithm": "merge_sort",
+    "k": 3
+}
+req = urllib.request.Request(
+    "http://localhost:5000/rank/rows",
+    data=json.dumps(payload).encode(),
+    headers={"Content-Type": "application/json"}
+)
+response = urllib.request.urlopen(req)
+print("\nTop 3 full rows by price (descending):")
+print(json.dumps(json.loads(response.read().decode()), indent=2))
+
