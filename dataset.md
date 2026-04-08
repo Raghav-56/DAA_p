@@ -10,8 +10,6 @@
 - **Format**: Single CSV table
 - **Last Updated**: January 2025
 
----
-
 ## 2 Dataset Attributes
 
 ### 2.1 Core Attributes (Always Active)
@@ -31,8 +29,6 @@
 | `delivery_time` | Integer | Estimated days to delivery |
 | `category`      | String  | Product category         |
 
----
-
 ## 3 Data Loading
 
 Simple CSV load:
@@ -42,8 +38,6 @@ Simple CSV load:
 - Skip rows with missing core attributes (`price`, `rating`)
 - Keep optional columns if present
 - Total valid records must be >= 1000
-
----
 
 ## 4 Data Quality Notes
 
@@ -59,8 +53,6 @@ Simple CSV load:
 - Non-numeric values in numeric columns cause that row to be skipped for sorting
 - String columns (e.g., `category`) are accepted as-is
 
----
-
 ## 5 Schema Mapping
 
 ### 5.1 CSV Column Names
@@ -72,8 +64,6 @@ product_id, price, rating, discount, reviews_count, delivery_time, category
 ```
 
 Additional columns are ignored.
-
----
 
 ## 6 References
 

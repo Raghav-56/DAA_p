@@ -1,5 +1,3 @@
-"""FastAPI server for product ranking."""
-
 import json
 from pathlib import Path
 import pandas as pd

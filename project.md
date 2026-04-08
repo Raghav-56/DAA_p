@@ -4,8 +4,6 @@
 
 This document specifies the design and implementation of the E-Commerce Product Ranking Proof-of-Concept. It covers algorithms, ranking strategies, the HTTP API server, benchmarking protocol, and execution details.
 
----
-
 ## 2 Algorithms Specification and Rationale
 
 ### 2.1 Merge Sort
@@ -32,8 +30,6 @@ All algorithms enforce a deterministic total order:
 
 Floating-point scores are equal iff `|a - b| ≤ 1e-9`.
 
----
-
 ## 3 Ranking Strategies
 
 ### 3.1 Single-Attribute Ascending
@@ -48,8 +44,6 @@ Sort by a single numeric attribute in descending order (higher values first).
 
 Example: rating descending → highest-rated products first.
 
----
-
 ## 4 Server Architecture & Request/Response Protocol
 
 ### 4.1 HTTP API
@@ -57,6 +51,7 @@ Example: rating descending → highest-rated products first.
 **Endpoint**: `POST /rank`
 
 **Request Body** (JSON):
+
 ```json
 {
   "strategy": "single_attribute_desc",
@@ -67,12 +62,14 @@ Example: rating descending → highest-rated products first.
 ```
 
 **Fields**:
+
 - `strategy`: Strategy name (single_attribute_asc, single_attribute_desc)
 - `algorithm`: Algorithm choice (merge_sort, quick_sort)
 - `attribute`: Attribute name to rank by
 - `k`: Number of top products to return
 
 **Response** (JSON):
+
 ```json
 {
   "product_ids": [42, 156, 203, ...],
@@ -83,6 +80,7 @@ Example: rating descending → highest-rated products first.
 ```
 
 **Fields**:
+
 - `product_ids`: Sorted list of top k product IDs
 - `ranking_time_ms`: Ranking algorithm execution time
 - `end_to_end_time_ms`: Total API latency including I/O
@@ -108,8 +106,6 @@ Example: rating descending → highest-rated products first.
 - Cache TTL: environment variable `CACHE_TTL_SECONDS` (default: 300)
 - Server port: 5000 (configurable)
 
----
-
 ## 5 Data Loading and Preprocessing
 
 ### 5.1 Loading
@@ -127,8 +123,6 @@ Load dataset CSV into memory; skip malformed rows.
 - Skip rows with missing core attributes (price, rating)
 - Non-numeric values in numeric columns cause row skip
 
----
-
 ## 6 Request Processing Flow
 
 1. Parse and validate request
@@ -138,8 +132,6 @@ Load dataset CSV into memory; skip malformed rows.
 5. Sort using specified algorithm
 6. Truncate to top k
 7. Return product IDs with timing
-
----
 
 ## 7 Comparator Rules for Deterministic Ordering
 
@@ -151,8 +143,6 @@ For all strategies, final tie-breaking order:
 
 This ensures identical results across multiple runs.
 
----
-
 ## 8 Validation
 
 - Dataset records: >= 1000 required
@@ -161,8 +151,6 @@ This ensures identical results across multiple runs.
 - Strategy name: must be single_attribute_asc or single_attribute_desc
 - Algorithm name: must be merge_sort or quick_sort
 - Attribute must exist in dataset
-
----
 
 ## 9 Benchmark Design and Validation Protocol
 
@@ -196,8 +184,6 @@ This ensures identical results across multiple runs.
 - Timing measurements are positive and reasonable
 - Merge Sort vs Quick Sort show similar or expected performance differences
 
----
-
 ## 10 Reproducibility
 
 - Python 3.12, pinned dependencies via `uv.lock`
@@ -205,8 +191,6 @@ This ensures identical results across multiple runs.
 - All random seeds are fixed
 - Benchmark warmup and iteration counts are consistent
 - Hardware details are recorded in benchmark report
-
----
 
 ## 11 Execution
 
@@ -232,11 +216,13 @@ curl -X POST http://localhost:5000/rank \
 ### 11.3 Run Benchmarks
 
 Smoke benchmark:
+
 ```bash
 uv run python Src/main.py benchmark --smoke
 ```
 
 Full benchmark:
+
 ```bash
 uv run python Src/main.py benchmark --full
 ```
@@ -246,8 +232,6 @@ uv run python Src/main.py benchmark --full
 ```bash
 uv run pytest -v
 ```
-
----
 
 ## 12 References
 
