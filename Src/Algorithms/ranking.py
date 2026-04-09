@@ -1,7 +1,18 @@
 import time
+import math
+from typing import Any
 
 from .merge_sort import merge_sort
 from .quick_sort import quick_sort
+
+
+def _to_number(value: Any, default: float = 0.0) -> float:
+    """Safely parse values for sorting keys; invalid or NaN returns default."""
+    try:
+        num = float(value)
+    except (TypeError, ValueError):
+        return default
+    return default if math.isnan(num) else num
 
 
 def _sort_products(
@@ -14,10 +25,12 @@ def _sort_products(
         return [], 0.0
 
     strategy_map = {
-        "price_asc": (lambda x: float(x[1].get("discounted_price", 0)), False),
-        "price_desc": (lambda x: float(x[1].get("discounted_price", 0)), True),
-        "rating_asc": (lambda x: float(x[1].get("product_rating", 0)), False),
-        "rating_desc": (lambda x: float(x[1].get("product_rating", 0)), True),
+        "price_asc": (lambda x: _to_number(x[1].get("discounted_price")), False),
+        "price_desc": (lambda x: _to_number(x[1].get("discounted_price")), True),
+        "rating_asc": (lambda x: _to_number(x[1].get("product_rating")), False),
+        "rating_desc": (lambda x: _to_number(x[1].get("product_rating")), True),
+        "reviews_desc": (lambda x: _to_number(x[1].get("total_reviews")), True),
+        "discount_desc": (lambda x: _to_number(x[1].get("discount_percentage")), True),
     }
 
     if strategy not in strategy_map:
@@ -49,7 +62,7 @@ def rank_products(
     
     Args:
         data: List of product dicts with 'product_title', 'discounted_price', 'product_rating', etc.
-        strategy: 'price_asc', 'price_desc', 'rating_asc', 'rating_desc'
+        strategy: 'price_asc', 'price_desc', 'rating_asc', 'rating_desc', 'reviews_desc', 'discount_desc'
         algorithm: 'merge_sort' or 'quick_sort'
         k: Return top-k product IDs
     

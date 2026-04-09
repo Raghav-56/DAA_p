@@ -38,11 +38,15 @@ Sort by a single numeric attribute in ascending order (lower values first).
 
 Example: price ascending → cheapest products first.
 
+Implemented: `price_asc`, `rating_asc`.
+
 ### 3.2 Single-Attribute Descending
 
 Sort by a single numeric attribute in descending order (higher values first).
 
 Example: rating descending → highest-rated products first.
+
+Implemented: `price_desc`, `rating_desc`, `reviews_desc`, `discount_desc`.
 
 ## 4 Server Architecture & Request/Response Protocol
 

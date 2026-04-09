@@ -35,6 +35,36 @@ response = urllib.request.urlopen(req)
 print("\nTop 10 by rating (descending):")
 print(json.dumps(json.loads(response.read().decode()), indent=2))
 
+# Test reviews strategy
+payload = {
+    "strategy": "reviews_desc",
+    "algorithm": "merge_sort",
+    "k": 5
+}
+req = urllib.request.Request(
+    "http://localhost:5000/rank",
+    data=json.dumps(payload).encode(),
+    headers={"Content-Type": "application/json"}
+)
+response = urllib.request.urlopen(req)
+print("\nTop 5 by reviews (descending):")
+print(json.dumps(json.loads(response.read().decode()), indent=2))
+
+# Test discount strategy
+payload = {
+    "strategy": "discount_desc",
+    "algorithm": "merge_sort",
+    "k": 5
+}
+req = urllib.request.Request(
+    "http://localhost:5000/rank",
+    data=json.dumps(payload).encode(),
+    headers={"Content-Type": "application/json"}
+)
+response = urllib.request.urlopen(req)
+print("\nTop 5 by discount percentage (descending):")
+print(json.dumps(json.loads(response.read().decode()), indent=2))
+
 # Test /rank/rows
 payload = {
     "strategy": "price_desc",

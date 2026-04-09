@@ -20,7 +20,7 @@ def run_benchmarks(smoke: bool = False):
     dataset_sizes = {1000, 5000} if smoke else {1000, 5000, 10000, 20000, 30000, 42000}
     k_values = [10, 100, 1000]
     extreme_k_values = [5000, 10000, 20000, 40000]  # For extreme k scaling
-    strategies = ["price_desc", "rating_desc"]
+    strategies = ["price_desc", "rating_desc", "reviews_desc", "discount_desc"]
     algorithms = ["merge_sort", "quick_sort"]
     
     # Load full dataset

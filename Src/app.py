@@ -39,7 +39,7 @@ def load_data():
 
 class RankRequest(BaseModel):
     """Request body for /rank endpoint."""
-    strategy: str  # e.g., "price_desc", "rating_asc"
+    strategy: str  # e.g., price_desc, reviews_desc
     algorithm: str  # "merge_sort" or "quick_sort"
     k: int
 

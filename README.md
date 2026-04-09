@@ -124,6 +124,8 @@ graph TB
 - `price_desc`: Sort by discounted price (descending)
 - `rating_asc`: Sort by product rating (ascending)
 - `rating_desc`: Sort by product rating (descending)
+- `reviews_desc`: Sort by total reviews (descending)
+- `discount_desc`: Sort by discount percentage (descending)
 
 **Algorithms:**
 
@@ -145,7 +147,7 @@ Benchmarks test algorithm performance across:
 
 - **Dataset sizes:** 1K, 5K, 10K, 42K products
 - **k values:** 10, 100
-- **Strategies:** price_desc, rating_desc
+- **Strategies:** price_desc, rating_desc, reviews_desc, discount_desc
 - **Algorithms:** merge_sort, quick_sort
 
 **3 runs per configuration** with average and std dev computed.
@@ -161,8 +163,8 @@ Benchmarks test algorithm performance across:
 
 - FastAPI server with `/rank` and `/health` endpoints  
 - Merge Sort and Quick Sort algorithms with stable/avg $O(n \log n)$ complexity
-- Single-attribute ranking by price or rating (ascending/descending)
-- Benchmark suite: 6 dataset sizes × 2 k values × 2 strategies × 2 algorithms = 48 configurations
+- Single-attribute ranking by price, rating, reviews, or discount percentage
+- Benchmark suite includes 4 strategies × 2 algorithms across full dataset-size and k grids
 - Performance metrics: CSV results, timing statistics, runtime plots
 - Dataset caching for query efficiency
 
@@ -191,7 +193,7 @@ Benchmarks test algorithm performance across:
 
 Each strategy produces a deterministic, globally-consistent ranking order:
 
-1. **Primary sort key:** Selected strategy value (price or rating)
+1. **Primary sort key:** Selected strategy value (price, rating, reviews, or discount percentage)
 2. **Tie-breaking:** Floating-point tolerance $|a-b| \le 1e^{-9}$
 3. **Return:** Top-k products as list of product IDs, in sorted order
 
