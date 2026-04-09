@@ -235,12 +235,21 @@ Reports and data saved to `outputs/benchmarks/` and `outputs/reports/`.
 ### 3. Start API Server
 
 ```bash
-uv run python main.py api --host 0.0.0.0 --port 5000
+uv run python main.py api --host localhost --port 5000
 ```
 
 Server runs at `http://localhost:5000`
 
-Open `http://localhost:5000` in your browser for a simple ranking UI with product cards.
+Open `http://localhost:5000` in your browser for a ranking UI.
+
+UI features:
+
+- Query form for strategy, algorithm, and top-k
+- Result view modes: **Grid**, **List**, and **Table** (switch without re-querying)
+- Client-side search box and category chips for filtering loaded results
+- Density modes: **Comfortable** and **Compact**
+- Compare mode: select up to 4 products and open a side-by-side comparison panel
+- Query summary and response-time status display
 
 **Health check:**
 

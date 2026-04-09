@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/styles.css?v=4" />
   </head>
   <body>
     <div class="bg-shape bg-a"></div>
@@ -20,7 +20,7 @@
       <header class="hero">
         <p class="kicker">DAA Ranking Demo</p>
         <h1>Sort products and show ranked cards</h1>
-        <p class="sub">Use your FastAPI endpoint to fetch top-k products and render them as clean cards.</p>
+        <p class="sub">Ranking Amazon products using Sorting algorithms.</p>
       </header>
 
       <section class="panel">
@@ -51,10 +51,51 @@
           <button type="submit">Rank Products</button>
         </form>
 
+        <div class="toolbar">
+          <div id="query-summary" class="query-summary">Query: not run yet</div>
+          <div class="view-modes" role="group" aria-label="Result view mode">
+            <button type="button" class="mode-btn" data-view="grid">Grid</button>
+            <button type="button" class="mode-btn" data-view="list">List</button>
+            <button type="button" class="mode-btn" data-view="table">Table</button>
+          </div>
+        </div>
+
+        <div class="discover-tools">
+          <label class="search-wrap">
+            <span>Search in loaded results</span>
+            <input
+              id="search-input"
+              type="text"
+              placeholder="Try laptop, camera, sony..."
+              autocomplete="off"
+            />
+          </label>
+
+          <div class="density-switch" role="group" aria-label="Display density">
+            <button type="button" class="density-btn" data-density="comfortable">Comfortable</button>
+            <button type="button" class="density-btn" data-density="compact">Compact</button>
+          </div>
+
+          <div class="compare-actions">
+            <button type="button" id="compare-toggle" class="ghost-btn" disabled>Compare Selected (0)</button>
+            <button type="button" id="clear-selection" class="ghost-btn" disabled>Clear</button>
+          </div>
+        </div>
+
+        <div id="category-chips" class="chips" aria-label="Category filter chips"></div>
+
         <div id="status" class="status">Ready.</div>
       </section>
 
-      <section id="results" class="grid" aria-live="polite"></section>
+      <section id="results" class="results results-grid" aria-live="polite"></section>
+
+      <section id="compare-panel" class="compare-panel is-hidden" aria-live="polite">
+        <div class="compare-head">
+          <h2>Compare selected products</h2>
+          <p id="compare-summary">Select 2 to 4 products from results to compare.</p>
+        </div>
+        <div id="compare-results"></div>
+      </section>
     </main>
 
     <template id="card-template">
@@ -62,6 +103,10 @@
         <div class="thumb-wrap">
           <img class="thumb" alt="Product image" loading="lazy" />
           <span class="rank-chip"></span>
+          <label class="select-pill">
+            <input class="compare-check" type="checkbox" />
+            <span>Select</span>
+          </label>
         </div>
         <div class="card-body">
           <h2 class="title"></h2>
@@ -76,6 +121,6 @@
       </article>
     </template>
 
-    <script src="/static/app.js"></script>
+    <script src="/static/app.js?v=4"></script>
   </body>
 </html>
